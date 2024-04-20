@@ -3,12 +3,16 @@ import Link from "next/link";
 import Image from "next/image";
 import "@/public/css/all.css/style.css";
 import { Button } from "react-bootstrap";
-import useAuth from "../components/useAuth";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/app/hook/useAuth";
 
 function Nav() {
-  const isAuthenticated = useAuth();
+  const { isLoggedIn, logout } = useAuth();
 
+  const handleLogout = () => {
+    logout();
+    // Optionally add redirection or other logic post logout
+  };
   return (
     <nav className="navbar navbar-expand-sm  fixed-top">
       <div className="container-fluid d-flex flex-row-reverse">
@@ -59,19 +63,24 @@ function Nav() {
                 <Button variant="outline-success">kkkkk</Button>
               </Link>
             </li>
-            {isAuthenticated && (
+            {isLoggedIn() ? (
               <>
                 <li className="nav-item">
-                  <Link href="/profile" className="nav-link">
-                    <Button variant="outline-success">Profile</Button>
-                  </Link>
+                  <Button variant="outline-success" onClick={handleLogout}>
+                    Logout
+                  </Button>
                 </li>
+
                 <li className="nav-item">
-                  <Link href="/logout" className="nav-link">
-                    <Button variant="outline-success">Logout</Button>
+                  <Link href="/login-user/profile">
+                    <Button variant="outline-success">profile</Button>
                   </Link>
                 </li>
               </>
+            ) : (
+              <Link href="/login-user">
+                <Button variant="outline-success">Login</Button>
+              </Link>
             )}
           </ul>
         </div>
@@ -79,5 +88,4 @@ function Nav() {
     </nav>
   );
 }
-
 export default Nav;

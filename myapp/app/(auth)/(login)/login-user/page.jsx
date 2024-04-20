@@ -1,11 +1,13 @@
 "use client";
 import Image from "react-bootstrap";
-import "@/public/css/all.css/style.css";
 import Link from "next/link";
 import { useState } from "react";
-import { resolve } from "styled-jsx/css";
+import { useAuth } from "@/app/hook/useAuth";
+import "@/public/css/all.css/style.css"; // Adjusted import for CSS
 
-export default function login() {
+export default function LoginPage() {
+  const { login } = useAuth();
+
   const [userData, setUserData] = useState({
     phoneNumber: "",
     password: "",
@@ -15,17 +17,15 @@ export default function login() {
   const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    setManagerData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const body = JSON.stringify({
-      ...userData,
-      rememberMe: userData.rememberMe,
-    });
+    const body = JSON.stringify(UserData);
+
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,22 +35,18 @@ export default function login() {
 
       if (res.ok) {
         const data = await res.json();
-        alert("تم تسجيل الدخول");
-        setIsSubmitted(true); // Set submission status to true upon success
-        setSubmitError(""); // Clear any previous errors
-      } else if (res.status === 401) {
-        // Handle specific error for phone number already in use
-        const errorMessage = await res.text();
-        setSubmitError(errorMessage);
-      } else if (res.status === 400) {
-        // Handle specific error for phone number already in use
+        alert("تم تسجيل الدخول"); // Consider more integrated UI feedback
+        login(data.token);
+        setIsSubmitted(true);
+        setSubmitError("");
+      } else {
         const errorMessage = await res.text();
         setSubmitError(errorMessage);
       }
     } catch (error) {
       console.error(error);
       setIsSubmitted(false);
-      setSubmitError(error.message || "An error occurred. Please try again."); // Set the error message
+      setSubmitError(error.message || "An error occurred. Please try again.");
     }
   };
   return (

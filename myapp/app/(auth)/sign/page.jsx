@@ -3,8 +3,11 @@ import Image from "react-bootstrap";
 import "@/public/css/all.css/style.css";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/app/hook/useAuth";
+import { useRouter } from "next/router";
 
 function Register() {
+  const { login } = useAuth();
   const [userData, setUserData] = useState({
     name: "",
     phoneNumber: "",
@@ -31,8 +34,9 @@ function Register() {
 
       if (res.ok) {
         const data = await res.json();
-        const message = data.body();
-        alert(message);
+        alert(data.message);
+        login(data.token);
+        router.push("/report");
         setIsSubmitted(true); // Set submission status to true upon success
         setSubmitError(""); // Clear any previous errors
       } else if (res.status === 401) {

@@ -1,21 +1,26 @@
-"use client";
-import { useState } from "react";
+import { useAuth } from "@/app/hook/useAuth";
 import Link from "next/link";
-import Image from "next/image";
-import { useAuth } from "../hook/useAuth";
 
-function Report() {
-  const { isLoggedIn } = useAuth(); // Ensuring useAuth provides isLoggedIn correctly
+function ReportElement() {
+  const { isLoggedIn } = useAuth(); // Corrected hook usage
 
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100 p-5">
       <div className="row border rounded-5 p-3 bg-white shadow box-area">
-        {isLoggedIn() ? (
+        {isLoggedIn() ? ( // Corrected conditional rendering
           <>
             <div
               className="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column right-box"
               style={{ background: "#fff" }}
             >
+              <div className="featured-image mb-3">
+                <img
+                  src="public/imgs/reportpage.svg"
+                  className="img-fluid"
+                  style={{ width: "250px" }}
+                  alt="Report Page Visual"
+                />
+              </div>
               <p
                 className="text-success fs-2"
                 style={{
@@ -41,11 +46,11 @@ function Report() {
                     name="problemType"
                     required
                   >
-                    <option value>الجهات المعنية</option>
+                    <option value="">الجهات المعنية</option>
                     <option value="option1">سونالغاز</option>
                     <option value="option2">الجزائرية للمياه</option>
                     <option value="option3">الديوان الوطني للتطهير</option>
-                    <option value="option1">إتصالات الجزائر</option>
+                    <option value="option4">إتصالات الجزائر</option>
                   </select>
                 </div>
                 <div className="input-group mb-3">
@@ -69,52 +74,30 @@ function Report() {
                     className="form-control form-control-lg bg-light fs-6"
                     placeholder="الوصف"
                     rows={3}
-                    defaultValue={""}
                   />
                 </div>
                 <div className="input-group mb-3">
                   <button className="btn btn-lg btn-success w-100 fs-6">
-                    تأكيد{" "}
+                    تأكيد
                   </button>
                 </div>
                 <div className="row">
                   <small>
                     ليس لديك حساب؟{" "}
-                    <a className="link-success" href="#">
-                      سجل
-                    </a>
+                    <Link href="/signup">
+                      <a className="link-success">سجل</a>
+                    </Link>
                   </small>
                 </div>
               </div>
             </div>
           </>
         ) : (
-          <div className="container mt-5">
-            <div className="row justify-content-center">
-              <div className="col-xl-8 col-lg-10 col-md-10 ">
-                <div className="border rounded-5 p-3 p-lg-5 bg-white text-center shadow">
-                  <h2>يجب تسجيل الدخول للإبلاغ عن المشكل</h2>
-                  <div className="featured-image mb-3">
-                    <img
-                      src="assets/imgs/pagevide.svg"
-                      className="img-fluid"
-                      alt="Description"
-                      style={{ maxWidth: "200px" }}
-                    />
-                  </div>
-                  <div>
-                    <small>
-                      {" "}
-                      ليس لديك حساب ,{" "}
-                      <Link className="link-success" href="/login-user">
-                        {" "}
-                        سجل من هنا
-                      </Link>
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div>
+            <h1>You need to be logged in first.</h1>
+            <Link href="/login-user">
+              <a>here</a>
+            </Link>
           </div>
         )}
       </div>
@@ -122,4 +105,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default ReportElement;
